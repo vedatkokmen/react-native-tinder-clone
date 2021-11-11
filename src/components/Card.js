@@ -1,29 +1,26 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
-import Card from './src/components/Card';
-import users from './assets/data/users';
+import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 
-const vedat = {
-  name: 'Vedat',
-  image: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png',
-  bio: 'A dude with a rocket is looking for a gal with fuel',
-};
+const Card = ({user}) => {
+  const {name, bio, image} = user;
 
-const App = () => {
   return (
-    <View style={styles.container}>
-      <Card user={users[2]} />
+    <View style={styles.card}>
+      <ImageBackground
+        style={styles.image}
+        source={{
+          uri: image,
+        }}>
+        <View style={styles.info}>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.bio}>{bio}</Text>
+        </View>
+      </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   card: {
     width: '95%',
     height: '70%',
@@ -70,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Card;
