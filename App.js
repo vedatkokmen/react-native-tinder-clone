@@ -1,13 +1,8 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import Card from './src/components/Card';
 import users from './assets/data/users';
-
-const vedat = {
-  name: 'Vedat',
-  image: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png',
-  bio: 'A dude with a rocket is looking for a gal with fuel',
-};
 
 const App = () => {
   return (
