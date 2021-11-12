@@ -1,13 +1,57 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Pressable, Dimensions} from 'react-native';
 import Card from './src/components/Card';
 import users from './assets/data/users';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  useAnimatedGestureHandler,
+  useDerivedValue,
+  interpolate,
+} from 'react-native-reanimated';
+import {PanGestureHandler} from 'react-native-gesture-handler';
 
 const App = () => {
+  const {width} = Dimensions.get('screen');
+  const ROTATION = 60;
+  const hiddenTranslateX = 2 * width;
+  const translateX = useSharedValue(0);
+  const rotate = useDerivedValue(
+    () =>
+      interpolate(translateX.value, [0, hiddenTranslateX], [0, ROTATION]) +
+      'deg',
+  );
+
+  const cardStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {translateX: withSpring(translateX.value)},
+        {rotate: rotate.value},
+      ],
+    };
+  });
+
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (event, ctx) => {
+      ctx.startX = translateX.value;
+    },
+    onActive: (event, ctx) => {
+      translateX.value = ctx.startX + event.translationX;
+    },
+    onEnd: (event, ctx) => {
+      translateX.value = ctx.startX;
+    },
+  });
+
   return (
     <View style={styles.container}>
-      <Card user={users[2]} />
+      <PanGestureHandler onGestureEvent={gestureHandler}>
+        <Animated.View style={[cardStyle, styles.animatedCard]}>
+          <Card user={users[2]} />
+        </Animated.View>
+      </PanGestureHandler>
     </View>
   );
 };
@@ -19,49 +63,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  card: {
-    width: '95%',
-    height: '70%',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  image: {
+  animatedCard: {
     width: '100%',
     height: '100%',
     borderRadius: 10,
-    resizeMode: 'contain',
-  },
-  name: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  bio: {
-    fontSize: 18,
-    color: '#fff',
-    lineHeight: 25,
-  },
-  info: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: '20%',
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    alignItems: 'center',
+  },
+  button: {
+    position: 'absolute',
+    bottom: 50,
+    borderWidth: 1,
+    paddingHorizontal: 20,
   },
 });
 

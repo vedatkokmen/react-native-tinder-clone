@@ -58,11 +58,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     height: '20%',
-    backgroundColor: 'rgba(0,0,0,0.1)',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+
     paddingHorizontal: 10,
   },
 });
