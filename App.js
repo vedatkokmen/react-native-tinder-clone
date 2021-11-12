@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Pressable, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
 import Card from './src/components/Card';
 import users from './assets/data/users';
+import Like from './assets/images/LIKE.png';
+import Nope from './assets/images/nope.png';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -58,6 +60,25 @@ const App = () => {
     };
   });
 
+  const likeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        translateX.value,
+        [0, hiddenTranslateX / 10],
+        [0, 1],
+      ),
+    };
+  });
+  const nopeStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        translateX.value,
+        [0, -hiddenTranslateX / 10],
+        [0, 1],
+      ),
+    };
+  });
+
   const gestureHandler = useAnimatedGestureHandler({
     onStart: (event, ctx) => {
       ctx.startX = translateX.value;
@@ -96,6 +117,14 @@ const App = () => {
       {currentProfile && (
         <PanGestureHandler onGestureEvent={gestureHandler}>
           <Animated.View style={[cardStyle, styles.animatedCard]}>
+            <Animated.Image
+              source={Like}
+              style={[styles.like, {left: 10}, likeStyle]}
+            />
+            <Animated.Image
+              source={Nope}
+              style={[styles.like, {right: 10}, nopeStyle]}
+            />
             <Card user={currentProfile} />
           </Animated.View>
         </PanGestureHandler>
@@ -112,8 +141,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   animatedCard: {
-    width: '100%',
-    height: '100%',
+    width: '95%',
+    height: '70%',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -128,6 +157,13 @@ const styles = StyleSheet.create({
     bottom: 50,
     borderWidth: 1,
     paddingHorizontal: 20,
+  },
+  like: {
+    width: 150,
+    height: 150,
+    zIndex: 1,
+    position: 'absolute',
+    resizeMode: 'contain',
   },
 });
 
