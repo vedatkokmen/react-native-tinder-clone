@@ -7,10 +7,10 @@ const Card = ({user}) => {
   return (
     <View style={styles.card}>
       <ImageBackground
-        style={styles.image}
         source={{
           uri: image,
-        }}>
+        }}
+        style={styles.image}>
         <View style={styles.info}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.bio}>{bio}</Text>
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     height: '20%',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-
     paddingHorizontal: 10,
   },
 });
